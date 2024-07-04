@@ -1,47 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Picker, TouchableOpacity, Alert, Image, ImageBackground } from 'react-native';
+import { View, Text, TouchableOpacity, Alert, Image, ImageBackground, StyleSheet } from 'react-native';
 import * as Location from 'expo-location';
 import { Ionicons } from '@expo/vector-icons';
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
 const SelectLocationScreen = ({ navigation }) => {
-    const [location, setLocation] = useState(null);
-    const [city, setCity] = useState('');
-    const [neighborhood, setNeighborhood] = useState('');
-    const [cities, setCities] = useState([]);
-    const [neighborhoods, setNeighborhoods] = useState([]);
-  
-    useEffect(() => {
-        (async () => {
-          let { status } = await Location.requestForegroundPermissionsAsync();
-          if (status !== 'granted') {
-            Alert.alert('Permission denied', 'Permission to access location was denied');
-            return;
-          }
-    
-          let location = await Location.getCurrentPositionAsync({});
-          setLocation(location);
-        })();
-      }, []);
-    
-      useEffect(() => {
-        // Fetch cities from your API
-        fetch('http://127.0.0.1:8000/api/places/')
-          .then(response => response.json())
-          .then(data => {
-            console.log(data);
-            setCities(data)})
-          .catch(error => console.error(error));
-      }, []);
-    
-      useEffect(() => {
-        if (city) {
-          // Fetch neighborhoods from your API based on selected city
-          fetch(`http://127.0.0.1:8000/api/neighborhoods?city=${city}`)
-            .then(response => response.json())
-            .then(data => setNeighborhoods(data))
-            .catch(error => console.error(error));
-        }
-      }, [city]);
+  const [location, setLocation] = useState(null);
+  const [city, setCity] = useState('');
+  const [neighborhood, setNeighborhood] = useState('');
+
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        Alert.alert('Permission denied', 'Permission to access location was denied');
+        return;
+      }
+
+      let location = await Location.getCurrentPositionAsync({});
+      setLocation(location);
+    })();
+  }, []);
 
   const handleContinue = () => {
     if (!city || !neighborhood) {
@@ -68,24 +47,64 @@ const SelectLocationScreen = ({ navigation }) => {
           <Text style={styles.locationButtonText}>Use Current Location</Text>
         </TouchableOpacity>
         <Text style={styles.orText}>OR</Text>
+        
+        {/* Replace City and Neighborhood Pickers with GooglePlacesAutocomplete */}
         <Text style={styles.label}>Select City</Text>
-        <Picker
-          selectedValue={city}
-          style={styles.picker}
-          onValueChange={(itemValue) => setCity(itemValue)}>
-          {cities.map((city) => (
-            <Picker.Item key={city.id} label={city.name} value={city.name} />
-          ))}
-        </Picker>
+        <GooglePlacesAutocomplete
+          placeholder='Enter City'
+          onPress={(data, details = null) => {
+            // 'details' is provided when fetchDetails = true
+            console.log(data, details);
+            setCity(data.description);
+          }}
+          fetchDetails={true}
+          query={{
+            key: 'AIzaSyCXA-2ogmX_O4eFcyXUqto6LFOHwzMwLco',
+            language: 'en', // language of the results
+          }}
+          styles={{
+            textInputContainer: {
+              backgroundColor: '#FFF',
+              borderRadius: 10,
+              marginBottom: 20,
+              elevation: 2,
+              width: '80%',
+            },
+            textInput: {
+              color: '#000',
+              fontSize: 16,
+            },
+          }}
+        />
+
         <Text style={styles.label}>Select Neighborhood</Text>
-        <Picker
-          selectedValue={neighborhood}
-          style={styles.picker}
-          onValueChange={(itemValue) => setNeighborhood(itemValue)}>
-          {neighborhoods.map((neighborhood) => (
-            <Picker.Item key={neighborhood.id} label={neighborhood.name} value={neighborhood.name} />
-          ))}
-        </Picker>
+        <GooglePlacesAutocomplete
+          placeholder='Enter Neighborhood'
+          onPress={(data, details = null) => {
+            // 'details' is provided when fetchDetails = true
+            console.log(data, details);
+            setNeighborhood(data.description);
+          }}
+          fetchDetails={true}
+          query={{
+            key: 'YOUR_GOOGLE_PLACES_API_KEY',
+            language: 'en', // language of the results
+          }}
+          styles={{
+            textInputContainer: {
+              backgroundColor: '#FFF',
+              borderRadius: 10,
+              marginBottom: 20,
+              elevation: 2,
+              width: '80%',
+            },
+            textInput: {
+              color: '#000',
+              fontSize: 16,
+            },
+          }}
+        />
+
         <TouchableOpacity
           style={styles.continueButton}
           onPress={handleContinue}
@@ -95,7 +114,7 @@ const SelectLocationScreen = ({ navigation }) => {
       </View>
     </ImageBackground>
   );
-}
+};
 
 const styles = StyleSheet.create({
   background: {
@@ -136,14 +155,6 @@ const styles = StyleSheet.create({
     color: '#000',
     marginBottom: 10,
   },
-  picker: {
-    height: 50,
-    width: '80%',
-    backgroundColor: '#FFF',
-    borderRadius: 10,
-    marginBottom: 20,
-    elevation: 2,
-  },
   locationButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -174,4 +185,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SelectLocationScreen;
+export default SelectLocationScreen

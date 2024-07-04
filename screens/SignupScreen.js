@@ -2,20 +2,20 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Image, Switch } from 'react-native';
 
 const SignupScreen = ({ navigation }) => {
-    const [fullName, setFullName] = useState('');
+    const [full_name, setFullName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [isBusinessOwner, setIsBusinessOwner] = useState(false);
+    const [is_business_owner, setIsBusinessOwner] = useState(false);
     const [businessName, setBusinessName] = useState('');
 
 
   const handleSignup = async () => {
     const userData = {
-        fullName,
+        full_name,
         email,
         password,
-        isBusinessOwner,
-        businessName: isBusinessOwner ? businessName : null
+        is_business_owner,
+        businessName: is_business_owner ? businessName : null
       };
       console.log('User data:', userData); // Log the data being sent
 
@@ -26,25 +26,26 @@ const SignupScreen = ({ navigation }) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          fullName,
+          full_name,
           email,
           password,
-          isBusinessOwner,
-          businessName: isBusinessOwner ? businessName : null
+          is_business_owner,
+          businessName: is_business_owner ? businessName : null
         }),
       });
 
       const data = await response.json();
-
       if (response.ok) {
-        Alert.alert('Sign Up Success', 'You have successfully signed up');
+        //Alert.alert('Sign Up Success', 'You have successfully signed up');
+        console.log('Sign Up Success', 'You have successfully signed up')
         // Navigate to the Login screen or another screen
         navigation.navigate('Login');
       } else {
-        Alert.alert('Sign Up Failed', data.message || 'Something went wrong');
+        //Alert.alert('Sign Up Failed', data.message || 'Something went wrong');
+        console.log('Sign Up Failed', data.message || 'Something went wrong')
       }
     } catch (error) {
-      Alert.alert('Sign Up Error', 'An error occurred. Please try again.');
+      //Alert.alert('Sign Up Error', 'An error occurred. Please try again.');
       console.error(error);
     }
   };
@@ -56,7 +57,7 @@ return (
       <TextInput
         style={styles.input}
         placeholder="Full Name"
-        value={fullName}
+        value={full_name}
         onChangeText={setFullName}
       />
       <TextInput
@@ -75,11 +76,11 @@ return (
       <View style={styles.switchContainer}>
         <Text style={styles.switchLabel}>Business Owner</Text>
         <Switch
-          value={isBusinessOwner}
+          value={is_business_owner}
           onValueChange={setIsBusinessOwner}
         />
       </View>
-      {isBusinessOwner && (
+      {is_business_owner && (
         <TextInput
           style={styles.input}
           placeholder="Business Name"
