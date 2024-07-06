@@ -5,8 +5,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 import LoginScreen from './screens/LoginScreen';
 import SignupScreen from './screens/SignupScreen';
 import HomeScreen from './screens/HomeScreen';
-import SelectLocationScreen from './screens/SelectLocationScreen';
-import BusinessOwnerScreen from './screens/BusinessOwnerScreen'
+import BusinessOwnerScreen from './screens/BusinessOwnerScreen';
+import RoutePlannerScreen from './screens/RoutePlannerScreen';
 
 
 const Stack = createStackNavigator();
@@ -14,19 +14,17 @@ const Stack = createStackNavigator();
 const App = () => {
   return (
     <NavigationContainer>
-        <Stack.Navigator>
-        <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="Signup" component={SignupScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="SelectLocation" component={SelectLocationScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="BusinessOwnerScreen" component={BusinessOwnerScreen} options={{ headerShown: false }} />
-       
-        {/* Add other screens here */}
-      </Stack.Navigator>
+        <Stack.Navigator initialRouteName="Login">
+        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="Signup" component={SignupScreen} />
+        <Stack.Screen name="BusinessOwner" component={BusinessOwnerScreen} />
+        <Stack.Screen name="RoutePlanner" component={RoutePlannerScreen} />
+
+       </Stack.Navigator>
     </NavigationContainer>
+  
   );
 };
-/* <Stack.Screen name="SelectLocation" component={SelectLocationScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="RouteOptions" component={RouteOptionsScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="Trip" component={TripScreen} options={{ headerShown: false }} />>*/
+
 export default App;

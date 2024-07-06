@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, StyleSheet, Alert, Text, TouchableOpacity } from 'react-native';
+import { View, TextInput, Pressable, StyleSheet, Alert, Text, Image } from 'react-native';
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
@@ -19,19 +19,16 @@ const LoginScreen = ({ navigation }) => {
       });
 
       const data = await response.json();
-      console.log(data.message)
+      console.log(data.message);
       if (response.ok) {
         Alert.alert('Login Success', 'You have successfully logged in');
-        console.log('Login Success', 'You have successfully logged in');
         if (data.user.is_business_owner)
-          navigation.navigate('BusinessOwnerScreen')
+          navigation.navigate('BusinessOwner')
         else
           navigation.navigate('Home');
       } else {
         Alert.alert('Login Failed', data.message || 'Something went wrong');
-        console.log('Login Failed', data.message || 'Something went wrong');
       }
-      //navigation.navigate('Home');
     } catch (error) {
       Alert.alert('Login Error', 'An error occurred. Please try again.');
       console.error(error);
@@ -39,36 +36,62 @@ const LoginScreen = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={styles.overlay}>
+      <Image source={require('../assets/Eat-Venture.png')} style={styles.logo} />
+      <Text style={styles.title}>Login</Text>
+
       <TextInput
         style={styles.input}
         placeholder="Email"
+        placeholderTextColor="#B2DFDB"
         value={email}
         onChangeText={setEmail}
-        keyboardType="email-address"
-        autoCapitalize="none"
+        inputMode="email"
       />
       <TextInput
         style={styles.input}
         placeholder="Password"
+        placeholderTextColor="#B2DFDB"
         value={password}
         onChangeText={setPassword}
         secureTextEntry
-        autoCapitalize="none"
       />
-      <Button title="Login" onPress={handleLogin} />
-      <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
+
+      <Pressable
+        style={styles.button}
+        onPress={handleLogin}
+        role="button"
+      >
+        <Text style={styles.buttonText}>Login</Text>
+      </Pressable>
+      <Pressable
+        onPress={() => navigation.navigate('Signup')}
+        role="link"
+      >
         <Text style={styles.signupText}>Don't have an account? Sign Up</Text>
-      </TouchableOpacity>
+      </Pressable>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  overlay: {
     flex: 1,
+    backgroundColor: '#E0F7FA',
+    alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 16,
+    padding: 20,
+  },
+  logo: {
+    width: 200,  
+    height: 200,  
+    marginBottom: 20,
+  },
+  title: {
+    fontSize: 34,
+    fontWeight: 'bold',
+    color: '#00796B',
+    marginBottom: 20,
   },
   input: {
     height: 40,
@@ -76,6 +99,20 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 12,
     paddingHorizontal: 8,
+  },
+  button: {
+    backgroundColor: '#00796B',
+    paddingVertical: 15,
+    paddingHorizontal: 30,
+    borderRadius: 25,
+    marginTop: 20,
+    alignItems: 'center',
+    boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)', 
+  },
+  buttonText: {
+    color: '#FFFFFF',
+    fontSize: 18,
+    fontWeight: 'bold',
   },
   signupText: {
     marginTop: 16,
