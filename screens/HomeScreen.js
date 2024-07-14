@@ -1,27 +1,32 @@
 import React from 'react';
-import { Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { Text, StyleSheet, Image, TouchableOpacity, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
 const HomeScreen = ({ navigation}) => {
   return (
-    <LinearGradient
-      colors={['#00796B', '#004D40']}
-      style={styles.container}
-    >
-      <Image source={require('../assets/Eat-Venture.png')} style={styles.logo} />
-      <Text style={styles.title}>Welcome to EatVenture</Text>
-      <Text style={styles.subtitle}>Explore the best food adventures around you!</Text>
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => navigation.navigate('RoutePlanner')}
+    <View style={styles.wrapper}>
+      <LinearGradient
+        colors={['#00796B', '#004D40']}
+        style={styles.container}
       >
-        <Text style={styles.buttonText}>Get Started</Text>
-      </TouchableOpacity>
-    </LinearGradient>
+        <Image source={require('../assets/Eat-Venture.png')} style={styles.logo} />
+        <Text style={styles.title}>Welcome to EatVenture</Text>
+        <Text style={styles.subtitle}>Explore the best food adventures around you!</Text>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate('RoutePlanner')}
+        >
+          <Text style={styles.buttonText}>Get Started</Text>
+        </TouchableOpacity>
+      </LinearGradient>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  wrapper: {
+    flex: 1,
+  },
   container: {
     flex: 1,
     alignItems: 'center',

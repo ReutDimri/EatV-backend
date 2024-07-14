@@ -20,7 +20,7 @@ const SignupScreen = ({ navigation }) => {
       console.log('User data:', userData); // Log the data being sent
 
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/signup/', {
+      const response = await fetch('https://eatventure-15176c479d24.herokuapp.com/api/signup/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -51,52 +51,58 @@ const SignupScreen = ({ navigation }) => {
   };
 
 return (
-    <View style={styles.container}>
-      <Image source={require('../assets/Eat-Venture.png')} style={styles.logo} />
-      <Text style={styles.title}>Sign Up</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Full Name"
-        value={full_name}
-        onChangeText={setFullName}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        secureTextEntry
-        value={password}
-        onChangeText={setPassword}
-      />
-      <View style={styles.switchContainer}>
-        <Text style={styles.switchLabel}>Business Owner</Text>
-        <Switch
-          value={is_business_owner}
-          onValueChange={setIsBusinessOwner}
-        />
-      </View>
-      {is_business_owner && (
+    <View style={styles.wrapper}>
+      <View style={styles.container}>
+        <Image source={require('../assets/Eat-Venture.png')} style={styles.logo} />
+        <Text style={styles.title}>Sign Up</Text>
         <TextInput
           style={styles.input}
-          placeholder="Business Name"
-          value={businessName}
-          onChangeText={setBusinessName}
+          placeholder="Full Name"
+          value={full_name}
+          onChangeText={setFullName}
         />
-      )}
-      <Button title="Sign Up" onPress={handleSignup} />
-      <Text style={styles.loginText} onPress={() => navigation.navigate('Login')}>
-        Already have an account? Login
-      </Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Email"
+          value={email}
+          onChangeText={setEmail}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Password"
+          secureTextEntry
+          value={password}
+          onChangeText={setPassword}
+        />
+        <View style={styles.switchContainer}>
+          <Text style={styles.switchLabel}>Business Owner</Text>
+          <Switch
+            value={is_business_owner}
+            onValueChange={setIsBusinessOwner}
+          />
+        </View>
+        {is_business_owner && (
+          <TextInput
+            style={styles.input}
+            placeholder="Business Name"
+            value={businessName}
+            onChangeText={setBusinessName}
+          />
+        )}
+        <Button title="Sign Up" onPress={handleSignup} />
+        <Text style={styles.loginText} onPress={() => navigation.navigate('Login')}>
+          Already have an account? Login
+        </Text>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  wrapper: {
+    flex: 1,
+    backgroundColor: '#00796B', // Green background
+  },
   container: {
     flex: 1,
     backgroundColor: '#E0F7FA',

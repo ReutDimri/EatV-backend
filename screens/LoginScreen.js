@@ -7,7 +7,7 @@ const LoginScreen = ({ navigation }) => {
 
   const handleLogin = async () => {
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/login/?email=${email}&password=${password}`, {
+      const response = await fetch(`https://eatventure-15176c479d24.herokuapp.com/api/login/?email=${email}&password=${password}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -36,45 +36,51 @@ const LoginScreen = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.overlay}>
-      <Image source={require('../assets/Eat-Venture.png')} style={styles.logo} />
-      <Text style={styles.title}>Login</Text>
+    <View style={styles.wrapper}>
+      <View style={styles.overlay}>
+        <Image source={require('../assets/Eat-Venture.png')} style={styles.logo} />
+        <Text style={styles.title}>Login</Text>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        placeholderTextColor="#B2DFDB"
-        value={email}
-        onChangeText={setEmail}
-        inputMode="email"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        placeholderTextColor="#B2DFDB"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
+        <TextInput
+          style={styles.input}
+          placeholder="Email"
+          placeholderTextColor="#B2DFDB"
+          value={email}
+          onChangeText={setEmail}
+          inputMode="email"
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Password"
+          placeholderTextColor="#B2DFDB"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+        />
 
-      <Pressable
-        style={styles.button}
-        onPress={handleLogin}
-        role="button"
-      >
-        <Text style={styles.buttonText}>Login</Text>
-      </Pressable>
-      <Pressable
-        onPress={() => navigation.navigate('Signup')}
-        role="link"
-      >
-        <Text style={styles.signupText}>Don't have an account? Sign Up</Text>
-      </Pressable>
+        <Pressable
+          style={styles.button}
+          onPress={handleLogin}
+          role="button"
+        >
+          <Text style={styles.buttonText}>Login</Text>
+        </Pressable>
+        <Pressable
+          onPress={() => navigation.navigate('Signup')}
+          role="link"
+        >
+          <Text style={styles.signupText}>Don't have an account? Sign Up</Text>
+        </Pressable>
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  wrapper: {
+    flex: 1,
+    backgroundColor: '#00796B', // Green background
+  },
   overlay: {
     flex: 1,
     backgroundColor: '#E0F7FA',

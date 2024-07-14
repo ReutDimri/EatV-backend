@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
-import { Text, StyleSheet, Image, Pressable, TextInput, View, Alert, Switch, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
+import React, { useState, useRef } from 'react';
+import { Text, StyleSheet, Image, Pressable, TextInput, View, Alert, Switch, ScrollView, KeyboardAvoidingView, Platform, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Picker } from '@react-native-picker/picker';
 import * as ImagePicker from 'expo-image-picker';
 
 const BusinessOwnerScreen = ({ navigation }) => {
+  const scrollViewRef = useRef(null);
+
   const [placeName, setPlaceName] = useState('');
   const [city, setCity] = useState('');
   const [address, setAddress] = useState('');
@@ -21,7 +23,7 @@ const BusinessOwnerScreen = ({ navigation }) => {
     'Brewery', 'Steakhouse', 'Sushi', 'Food Truck', 'Bakery', 'Deli', 
     'Juice Bar', 'Asian', 'Vietnamese', 'Moroccan'
   ];
-  
+
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -29,8 +31,6 @@ const BusinessOwnerScreen = ({ navigation }) => {
       aspect: [4, 3],
       quality: 1,
     });
-
-    console.log(result);
 
     if (!result.canceled) {
       setImage(result.uri);
@@ -44,8 +44,8 @@ const BusinessOwnerScreen = ({ navigation }) => {
       formData.append('city', city);
       formData.append('address', address);
       formData.append('food_category', foodCategory);
-      formData.append('is_kosher', isKosher);
-      formData.append('has_vegan_option', hasVeganOption);
+      formData.append('is_kosher', isKosher ? 'true' : 'false');
+      formData.append('has_vegan_option', hasVeganOption ? 'true' : 'false');
       formData.append('recommended_dishes', recommendedDishes);
       formData.append('link', link);
       if (image) {
@@ -55,8 +55,8 @@ const BusinessOwnerScreen = ({ navigation }) => {
           name: 'business_image.jpg',
         });
       }
-
-      const response = await fetch('http://127.0.0.1:8000/api/create_place/', {
+      
+      const response = await fetch(`https://eatventure-15176c479d24.herokuapp.com/api/create_place/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -81,13 +81,21 @@ const BusinessOwnerScreen = ({ navigation }) => {
   return (
     <LinearGradient
       colors={['#00796B', '#004D40']}
-      style={styles.container}
+      style={styles.gradient}
     >
       <KeyboardAvoidingView 
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={styles.container}
+        style={styles.avoidingView}
       >
-        <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <View style={styles.scrollButtonsContainer}>
+          <TouchableOpacity style={styles.scrollButton} onPress={() => scrollViewRef.current.scrollTo({y: 0, animated: true})}>
+            <Text style={styles.scrollButtonText}>Up</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.scrollButton} onPress={() => scrollViewRef.current.scrollToEnd({animated: true})}>
+            <Text style={styles.scrollButtonText}>Down</Text>
+          </TouchableOpacity>
+        </View>
+        <ScrollView ref={scrollViewRef} contentContainerStyle={styles.scrollContainer} style={styles.scrollView}>
           <View style={styles.innerContainer}>
             <Image source={require('../assets/Eat-Venture.png')} style={styles.logo} />
             <Text style={styles.title}>Add Your Business</Text>
@@ -181,18 +189,39 @@ const BusinessOwnerScreen = ({ navigation }) => {
 }
 
 const styles = StyleSheet.create({
-  container: {
+  gradient: {
+    flex: 1,
+  },
+  avoidingView: {
+    flex: 1,
+  },
+  scrollButtonsContainer: {
+    position: 'absolute',
+    top: 50,
+    left: 10,
+    zIndex: 1000,
+  },
+  scrollButton: {
+    marginVertical: 5,
+    padding: 10,
+    backgroundColor: '#00796B',
+    borderRadius: 5,
+  },
+  scrollButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+  },
+  scrollView: {
     flex: 1,
   },
   scrollContainer: {
     flexGrow: 1,
     justifyContent: 'center',
-    paddingBottom: 20,
+    paddingVertical: 20,
   },
   innerContainer: {
-    flex: 1,
     alignItems: 'center',
-    paddingVertical: 20,
+    paddingHorizontal: 20,
   },
   logo: {
     width: 200,
